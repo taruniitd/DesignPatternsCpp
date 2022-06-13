@@ -1,0 +1,20 @@
+#include <iostream>
+using namespace std;
+
+class AudioDecoder : pulic DecodeDecoder
+{
+    DecodeDecoder decodeDecoder 
+    void decode(string type, string file)
+    {
+        if(type == "evs" || type == "amr")
+            decodeAdapter = new decodeAdapter(type);
+            decodeAdapter.decode(type, file);
+    }
+};
+
+int main()
+{
+    AudioDecoder audDec = new AudioDecoder();
+    audDec.decode("evs", "file.evs");
+    audDec.decode("amr", "file.amr");
+}
