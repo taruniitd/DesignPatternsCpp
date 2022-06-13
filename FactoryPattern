@@ -1,0 +1,53 @@
+//https://www.interviewbit.com/design-patterns-interview-questions/
+//https://www.geeksforgeeks.org/design-patterns-set-2-factory-method/
+#include <iostream>
+using namespace std;
+
+class packDepack
+{
+    public:
+    virtual void pack() = 0;
+    
+    virtual void depack() = 0;
+};
+
+class evsPackDepack : public packDepack
+{
+    public : 
+        void pack() { cout << " evs pack " << endl; }
+        void depack() { cout << " evs depack " << endl; }
+};
+
+class amrPackDepack : public packDepack
+{
+    public :
+        void pack() { cout << " amr pack " << endl; }
+        void depack() { cout << " amr depack " << endl; }
+};
+
+class packDepackFactory
+{
+    public:
+        packDepack* getPackDepackInstance(string type)
+        {
+            if(type == "EVS")
+            {
+                return new evsPackDepack();
+            }
+            else if(type == "AMR")
+            {
+                return new amrPackDepack();
+            }
+        }
+};
+
+int main() {
+	
+	packDepackFactory *packFactory = new packDepackFactory();
+	packDepack *AmrPackDepack = packFactory->getPackDepackInstance("AMR");
+	packDepack *EvsPackDepack = packFactory->getPackDepackInstance("EVS");
+	
+	AmrPackDepack->pack();
+	EvsPackDepack->depack();
+	return 0;
+}
