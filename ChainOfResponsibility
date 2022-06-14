@@ -16,17 +16,20 @@ class DefaultHandler : public Handler
     public :
         DefaultHandler()
         {
-            next_handler = nullptr;
+            this->next_handler = nullptr;
         }
-        Handler set_next(Handler* handler) override
+        Handler* set_next(Handler* handler) override
         {
-            next_handler = handler;
+            cout << "set next handler " << endl;
+            this->next_handler = handler;
+            return handler;
         }
         
         string Handle(string request) override
         {
-            if(this->next_handler !- nullptr)
-                this->next_handler->Handle(request);
+            cout << "call DefaultHandler " << endl;
+            if(this->next_handler != nullptr)
+                return this->next_handler->Handle(request);
         
             return {};
         }
@@ -38,6 +41,7 @@ class PackDepackhandler : public DefaultHandler
     public:
         string Handle(string request) override
         {
+            cout << "Inside Handle of PackDepackhandler" << endl;
             if(request == "depack")
             {
                 return "depack returning" + request + "\n";
@@ -48,7 +52,7 @@ class PackDepackhandler : public DefaultHandler
             } 
             else
             {
-                DefaultHandler::Handle(request);
+                return DefaultHandler::Handle(request);
             }
         }
 };
@@ -58,6 +62,7 @@ class CodecHandler : public DefaultHandler
     public:
         string Handle(string request) override
         {
+            cout << "Inside Handle of CodecHandler" << endl;
             if(request == "dec")
             {
                 return "decoder returning" + request + "\n";
@@ -68,7 +73,7 @@ class CodecHandler : public DefaultHandler
             }
             else
             {
-                DefaultHandler::Handle(request);
+                return DefaultHandler::Handle(request);
             }
         }
 };
@@ -78,13 +83,14 @@ class ResamplerHandler : public DefaultHandler
     public:
         string Handle(string request) override
         {
+            cout << "Inside Handle of ResamplerHandler" << endl;
             if(request == "res")
             {
                 return "resampler returning" + request + "\n";
             }
             else
             {
-                DefaultHandler::Handle(request);
+                return DefaultHandler::Handle(request);
             }
         }
 };
@@ -92,10 +98,12 @@ class ResamplerHandler : public DefaultHandler
 //client code
 void TransCodeSessHandler(Handler& handler)
 {
-    string mediaTrans = {"depack", "dec", "res", "enc", "pack"};
+    //std::vector<string> mediaTrans = {"depack1"/*, "dec1", "res1", "enc1", "pack1"*/};
+    std::vector<string> mediaTrans = {"depack", "dec", "res", "enc", "pack"};
     for(const string& transOper : mediaTrans)
     {
-        string result = handler.Handler(transOper)
+        cout << "try for string :" << transOper << "   " << endl;
+        string result = handler.Handle(transOper);
         if(!result.empty())
             cout << "   " << result;
         else
@@ -104,11 +112,11 @@ void TransCodeSessHandler(Handler& handler)
 }
 int main()
 {
-    PackDepackhandler* packDepackhandler = new packDepackhandler();
+    PackDepackhandler* packDepackhandler = new PackDepackhandler();
     CodecHandler* codechandler = new CodecHandler();
     ResamplerHandler* resamplerhandler = new ResamplerHandler();
-    
-    packDepackhandler->setNext(codechandler)->setNext(resamplerhandler)->setNext(codechandler)->setNext(packDepackhandler);
+    //if i include all 5 with set_next then it will go in infinite loop    
+    packDepackhandler->set_next(codechandler)->set_next(resamplerhandler);//->set_next(codechandler)->set_next(packDepackhandler);
 
     cout << "curent chain is : depack ->dec->res->enc->pack" << endl;
     
