@@ -17,13 +17,13 @@ class realInternet : public internet
         }
 };
 
-class proxyInternet : public internet
+class ProxyInternet : public internet
 {
     public :
         internet* realObj = new realInternet();
         list<string> bannedSitesList;
         
-        proxyInternet()
+        ProxyInternet()
         {
             bannedSitesList.push_back("bogus.com");
             bannedSitesList.push_back("new_bogus.com");
@@ -33,7 +33,7 @@ class proxyInternet : public internet
             //filter banned sites here in proxy and direct to real internet for gud sites
             list<string>::iterator it;
             it = find(bannedSitesList.begin(), bannedSitesList.end(), site);
-            if(it == bannedSitesList.end())
+            if(it != bannedSitesList.end())
             {
                 cout << "proxy banned site = " << site << endl;
             }
@@ -46,7 +46,7 @@ class proxyInternet : public internet
 
 int main()
 {
-    internet *proxyInternet = new proxyInternet(); 
+    internet *proxyInternet = new ProxyInternet(); 
     proxyInternet->connectTo("geeks.com");
     proxyInternet->connectTo("allow.com");
     
