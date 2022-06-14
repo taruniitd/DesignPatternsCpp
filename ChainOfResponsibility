@@ -1,0 +1,52 @@
+//https://refactoring.guru/design-patterns/chain-of-responsibility/cpp/example#:~:text=Responsibility%20%2F%20C%2B%2B-,Chain%20of%20Responsibility%20in%20C%2B%2B,concrete%20classes%20of%20the%20receivers.
+
+class Handler
+{
+    public:
+        virtual Handler set_next(Handler* handler) = 0;
+        
+};
+
+class DefaultHandler : public Handler
+{
+    
+    
+};
+
+class PackDepackhandler : public DefaultHandler
+{
+    
+};
+
+class CodecHandler : public DefaultHandler
+{
+    
+};
+
+class ResamplerHandler : public DefaultHandler
+{
+    
+};
+
+//client code
+void TransCodeSessHandler(Handler& handler)
+{
+    string mediaTrans = {"depack", "dec", "res", "enc", "pack"};
+    for(const string& transOper : mediaTrans)
+    {
+        string result = handler.Handler
+    }
+}
+int main()
+{
+    PackDepackhandler* packDepackhandler = new packDepackhandler();
+    CodecHandler* codechandler = new CodecHandler();
+    ResamplerHandler* resamplerhandler = new ResamplerHandler();
+    
+    packDepackhandler->setNext(codechandler)->setNext(resamplerhandler)->setNext(codechandler)->setNext(packDepackhandler);
+
+    cout << "curent chain is : depack ->dec->res->enc->pack" << endl;
+    
+    
+    
+}
