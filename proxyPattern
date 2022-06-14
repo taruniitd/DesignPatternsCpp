@@ -1,0 +1,57 @@
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+
+class internet
+{
+    public :
+        virtual void connectTo(string site) = 0;
+};
+
+class realInternet : public internet
+{
+    public :
+        void connectTo(string site)
+        {
+            cout << "process working real site : " << site << endl;
+        }
+};
+
+class proxyInternet : public internet
+{
+    public :
+        internet* realObj = new realInternet();
+        list<string> bannedSitesList;
+        
+        proxyInternet()
+        {
+            bannedSitesList.push_back("bogus.com");
+            bannedSitesList.push_back("new_bogus.com");
+        }
+        void connectTo(string site)
+        {
+            //filter banned sites here in proxy and direct to real internet for gud sites
+            list<string>::iterator it;
+            it = find(bannedSitesList.begin(), bannedSitesList.end(), site);
+            if(it == bannedSitesList.end())
+            {
+                cout << "proxy banned site = " << site << endl;
+            }
+            else
+            {
+                realObj->connectTo(site);
+            }
+        }
+};
+
+int main()
+{
+    internet *proxyInternet = new proxyInternet(); 
+    proxyInternet->connectTo("geeks.com");
+    proxyInternet->connectTo("allow.com");
+    
+    proxyInternet->connectTo("bogus.com");
+    proxyInternet->connectTo("new_bogus.com");
+    
+    return 0;
+}
