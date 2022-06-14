@@ -1,31 +1,92 @@
 //https://refactoring.guru/design-patterns/chain-of-responsibility/cpp/example#:~:text=Responsibility%20%2F%20C%2B%2B-,Chain%20of%20Responsibility%20in%20C%2B%2B,concrete%20classes%20of%20the%20receivers.
-
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
 class Handler
 {
     public:
-        virtual Handler set_next(Handler* handler) = 0;
-        
+        virtual Handler* set_next(Handler* handler) = 0;
+        virtual string Handle(string request) = 0;       
 };
 
 class DefaultHandler : public Handler
 {
-    
+    private :
+        Handler* next_handler;
+    public :
+        DefaultHandler()
+        {
+            next_handler = nullptr;
+        }
+        Handler set_next(Handler* handler) override
+        {
+            next_handler = handler;
+        }
+        
+        string Handle(string request) override
+        {
+            if(this->next_handler !- nullptr)
+                this->next_handler->Handle(request);
+        
+            return {};
+        }
     
 };
 
 class PackDepackhandler : public DefaultHandler
 {
-    
+    public:
+        string Handle(string request) override
+        {
+            if(request == "depack")
+            {
+                return "depack returning" + request + "\n";
+            }
+            else if(request == "pack")
+            {
+                return "pack returning" + request + "\n";
+            } 
+            else
+            {
+                DefaultHandler::Handle(request);
+            }
+        }
 };
 
 class CodecHandler : public DefaultHandler
 {
-    
+    public:
+        string Handle(string request) override
+        {
+            if(request == "dec")
+            {
+                return "decoder returning" + request + "\n";
+            }
+            else if(request == "enc")
+            {
+                return "encoder returning" + request + "\n";
+            }
+            else
+            {
+                DefaultHandler::Handle(request);
+            }
+        }
 };
 
 class ResamplerHandler : public DefaultHandler
 {
-    
+    public:
+        string Handle(string request) override
+        {
+            if(request == "res")
+            {
+                return "resampler returning" + request + "\n";
+            }
+            else
+            {
+                DefaultHandler::Handle(request);
+            }
+        }
 };
 
 //client code
@@ -34,7 +95,11 @@ void TransCodeSessHandler(Handler& handler)
     string mediaTrans = {"depack", "dec", "res", "enc", "pack"};
     for(const string& transOper : mediaTrans)
     {
-        string result = handler.Handler
+        string result = handler.Handler(transOper)
+        if(!result.empty())
+            cout << "   " << result;
+        else
+            cout <<" not desired" << endl;
     }
 }
 int main()
@@ -47,6 +112,11 @@ int main()
 
     cout << "curent chain is : depack ->dec->res->enc->pack" << endl;
     
+    TransCodeSessHandler(*packDepackhandler);
     
+    cout << endl;
+    delete packDepackhandler;
+    delete codechandler;
+    delete resamplerhandler;
     
 }
