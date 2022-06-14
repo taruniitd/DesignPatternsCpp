@@ -1,20 +1,69 @@
 #include <iostream>
 using namespace std;
 
-class AudioDecoder : pulic DecodeDecoder
+class DecodeDecoder
 {
-    DecodeDecoder decodeDecoder 
+    public :
+        virtual void decode(string format, string file) = 0;
+};
+
+class SpecificDecoder
+{
+    public :
+        virtual void decodeEvs(string format, string file) = 0;
+        virtual void decodeAmr(string format, string file) = 0;
+};
+
+class SpecificDecoderImpl : public SpecificDecoder
+{
+    public :
+        void decodeEvs(string format, string file)
+        {
+            cout << " decode Evs " << endl;
+        }
+        void decodeAmr(string format, string file)
+        {
+            cout << "decode Amr " << endl;
+        }
+};
+
+class DecodeAdaptor : public DecodeDecoder
+{
+    SpecificDecoder* speciDecoder;
+    
+    public :
+        void decode(string format, string file)
+        {
+            if(format == "evs")
+            {
+                speciDecoder = new SpecificDecoderImpl();
+                speciDecoder->decodeEvs(format, file);
+            }
+            else if(format == "amr")
+            {
+                speciDecoder = new SpecificDecoderImpl();
+                speciDecoder->decodeAmr(format, file);
+            }
+        }
+};
+
+class AudioDecoder : public DecodeDecoder
+{
+    public:
+    DecodeDecoder* decodeDecoder; 
     void decode(string type, string file)
     {
         if(type == "evs" || type == "amr")
-            decodeAdapter = new decodeAdapter(type);
-            decodeAdapter.decode(type, file);
+        {
+            decodeDecoder = new DecodeAdaptor();
+            decodeDecoder->decode(type, file);
+        }
     }
 };
 
 int main()
 {
-    AudioDecoder audDec = new AudioDecoder();
-    audDec.decode("evs", "file.evs");
-    audDec.decode("amr", "file.amr");
+    AudioDecoder *audDec = new AudioDecoder();
+    audDec->decode("evs", "file.evs");
+    audDec->decode("amr", "file.amr");
 }
