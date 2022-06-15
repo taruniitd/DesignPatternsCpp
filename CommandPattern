@@ -1,0 +1,109 @@
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+
+class Command
+{
+    public :
+        virtual void execute() = 0;
+};
+
+class TubeLight
+{
+    public :
+        /*TubeLight *tubelight;
+        TubeLight(TubeLight *tubelight)
+        {
+            this->tubelight = tubelight;
+        }*/
+        void TubeLightOn()
+        {
+            std::cout << "Switch TubeLightOn " << std::endl;
+        }
+        void TubeLightOff()
+        {
+            cout << "Switch TubeLightOff " << endl;
+        }
+};
+
+class Radio
+{
+    public :
+        /*Radio* radio;
+        Radio(Radio* radio)
+        {
+            this->radio = radio;
+        }*/
+        
+        void RadioOn()
+        {
+            cout << "Switch on Radio" << endl;
+        }
+        
+        void RadioOff()
+        {
+            cout << " Switch off Radio" << endl;
+        }
+};
+
+class TubeLightCommand : public Command
+{
+    public :
+        TubeLight* tubelight;
+        TubeLightCommand(TubeLight* tubelight)
+        {
+            this->tubelight = tubelight;
+        }
+        void execute()
+        {
+            tubelight->TubeLightOn();
+            
+            tubelight->TubeLightOff();
+        }
+};
+
+class RadioCommand : public Command
+{
+    public :
+        Radio* radio;
+        RadioCommand(Radio* radio)
+        {
+            this->radio = radio;
+        }
+        void execute()
+        {
+            radio->RadioOn();
+            radio->RadioOff();
+        }
+};
+
+class RemoteControl
+{
+    public :
+        Command* cmd;
+        RemoteControl() { }
+        void setCommand(Command* cmd)
+        {
+            this->cmd = cmd;
+        }
+        void pressCommand()
+        {
+            cmd->execute();
+        }
+};
+
+int main()
+{
+    RemoteControl* remoteCntrl = new RemoteControl();
+    TubeLight* tubelight = new TubeLight();
+    Radio* radio = new Radio();
+    
+    remoteCntrl->setCommand(new TubeLightCommand(tubelight));
+    remoteCntrl->pressCommand();
+    remoteCntrl->setCommand(new RadioCommand(radio));
+    remoteCntrl->pressCommand();
+    
+    
+    
+    
+}
