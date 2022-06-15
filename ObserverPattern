@@ -1,0 +1,88 @@
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+
+
+class CurrentScoreDisplay
+{
+    public :
+        int runs, wickets;
+        float overs;
+        
+        void update(int runs, int wickets, float overs)
+        {
+            this->runs = runs;
+            this->wickets = wickets;
+            this->overs = overs;
+            display();
+        }
+        void display()
+        {
+            cout << " Display CurrentScoreDisplay : " << endl;
+            cout << "runs = " << runs << "wickets = " << wickets << "overs = " << overs << endl;
+        }
+};
+
+class AverageScoreDisplay
+{
+    public :
+        float runRate;
+        int predictedScore;
+        void update(int runs, int wickets, float overs)
+        {
+            this->runRate = runs / overs;
+            this->predictedScore = this->runRate * 50;
+            display();
+        }
+        void display()
+        {
+            cout << "display AverageScoreDisplay : " << endl;
+            std::cout << "runRate = " << runRate << "predictedScore = " << predictedScore << std::endl;
+        }
+};
+
+class CricketData
+{
+    public :
+        int runs, wickets;
+        float overs;
+        CurrentScoreDisplay* curScore;
+        AverageScoreDisplay* avgScore;
+        CricketData(CurrentScoreDisplay* curScore, AverageScoreDisplay* avgScore)
+        {
+            this->curScore = curScore;
+            this->avgScore = avgScore;
+        }
+        
+        int getLatestRuns()
+        {
+            return 90;
+        }
+        
+        int getLatestWickets()
+        {
+            return 2;
+        }
+        
+        float getLatestOvers()
+        {
+            return (float)10.2;
+        }
+        void dataChanged()
+        {
+            runs = getLatestRuns();
+            wickets = getLatestWickets();
+            overs = getLatestOvers();
+            
+            curScore->update(runs, wickets, overs);
+            avgScore->update(runs, wickets, overs);
+        }
+};
+int main()
+{
+    CurrentScoreDisplay* curScore = new CurrentScoreDisplay();
+    AverageScoreDisplay* avgScore = new AverageScoreDisplay();
+    
+    CricketData* crikInfo = new CricketData(curScore, avgScore);
+    crikInfo->dataChanged();
+}
