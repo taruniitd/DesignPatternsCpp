@@ -1,0 +1,71 @@
+#include <iostream>
+using namespace std;
+
+class shape
+{
+    public:
+        virtual void draw() = 0;
+};
+
+class Circle : public shape
+{
+    public :
+        void draw() { cout << "draw normal circle" << endl; }
+};
+
+class rectangle : public shape
+{
+    public :
+        void draw() { cout << "draw normal rectangle" << endl; }
+};
+
+class shapeDecorator : public shape
+{
+    public:
+        shape* decoratedShape;
+        
+        shapeDecorator(shape* normalShape)
+        {
+            decoratedShape = normalShape;
+        }
+
+        void draw()
+        {
+            decoratedShape->draw();
+        }
+};
+
+class redShapeDecorator : public shapeDecorator
+{
+    public :
+        redShapeDecorator(shape* normalShape) : shapeDecorator(normalShape)
+        {
+        
+        }
+    
+        void draw()
+        {
+            decoratedShape->draw();
+            setRedBorder(decoratedShape);
+        }
+        
+        void setRedBorder(shape* decoratedShape)
+        {
+            cout << "Border color Red" << endl;
+        }
+};
+
+int main() {
+	shape* circle = new Circle();
+	cout << "draw circle with no border" << endl;
+	circle->draw();
+	
+	shape* redCircle = new redShapeDecorator(new Circle());
+	cout << "draw circle with red border" << endl;
+	redCircle->draw();
+	
+	shape* redRectangle = new redShapeDecorator(new rectangle());
+	cout << "draw rectangle with red border" << endl;
+	redRectangle->draw();
+	return 0;
+}
