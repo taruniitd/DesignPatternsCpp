@@ -1,0 +1,120 @@
+#include <iostream>
+using namespace std;
+
+class HousePlan
+{
+    public :
+        virtual void setBasement(string basement) = 0;
+        virtual void setStructure(string structure) = 0;
+        virtual void setRoof(string roof) = 0;
+        virtual void setInternals(string internals) = 0;
+};
+
+class House : public HousePlan
+{
+    public :
+        string basement;
+        string structure;
+        string roof;
+        string internals;
+        void setBasement(string basement)
+        {
+            cout << "basement ready" << endl;
+            this->basement = basement;
+        }
+        void setStructure(string structure)
+        {
+            cout << "structure ready" << endl;
+            this->structure = structure;
+        }
+        void setRoof(string roof)
+        {
+            cout << " roof ready" << endl;
+            this->roof = roof;
+        }
+        void setInternals(string internals)
+        {
+            cout << "internals ready" << endl;
+            this->internals = internals;
+        }
+        
+};
+
+class HouseBuilder
+{
+    public :
+        virtual void buildBasement() = 0;
+        virtual void buildStructure() = 0;
+        virtual void buildRoof() = 0;
+        virtual void buildInternals() = 0;
+        virtual House* getHouse() = 0;
+};
+
+class IglooHouseBuilder : public HouseBuilder
+{
+    public :
+    
+        House* house;
+        IglooHouseBuilder()
+        {
+            this->house = new House();
+        }
+        void buildBasement()
+        {
+            this->house->setBasement("Igloo basement");
+        }
+        void buildStructure()
+        {
+            this->house->setStructure("Igloo structure");
+        }
+        void buildRoof()
+        {
+            this->house->setRoof("Igloo roof");
+        }
+        void buildInternals()
+        {
+            this->house->setInternals("Igloo internals");
+        }
+        
+        House* getHouse()
+        {
+            return this->house;
+        }
+    
+};
+
+class CivilEngineer
+{
+    public :
+        HouseBuilder* hBildr;
+        CivilEngineer(HouseBuilder* hBildr)
+        {
+            this->hBildr = hBildr;
+        }
+        
+        void constructHouse()
+        {
+            this->hBildr->buildBasement();
+            this->hBildr->buildStructure();
+            this->hBildr->buildRoof();
+            this->hBildr->buildInternals();
+        }
+        
+        House* getHouse()
+        {
+            return this->hBildr->getHouse();
+        }
+};
+int main() {
+	IglooHouseBuilder* iglooHBldr = new IglooHouseBuilder();
+	CivilEngineer* director = new CivilEngineer(iglooHBldr);
+	
+	director->constructHouse();
+	
+	cout << " getHosue = " << director->getHouse() << endl;
+	cout << " basement = " << director->getHouse()->basement << endl;
+	cout << " structure = " << director->getHouse()->structure << endl;
+	cout << " roof = " << director->getHouse()->roof << endl;
+	cout << " internals = " << director->getHouse()->internals << endl;
+	return 0;
+}
