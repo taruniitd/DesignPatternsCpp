@@ -1,0 +1,89 @@
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+
+class employee
+{
+    public :
+    virtual void showEmployeeDetails() = 0;
+};
+
+class Developer : public employee
+{
+    public :
+        string name;
+        string empId;
+        string position;
+        Developer(string name, string empId, string position)
+        {
+            this->name = name;
+            this->empId = empId;
+            this->position = position;
+        }
+        void showEmployeeDetails()
+        {
+            cout << "dev info : " << "name : " << name << "empId : " << empId << "position : " << position <<endl;
+        }
+};
+
+class Manager : public employee
+{
+    public :
+        string name;
+        string empId;
+        string position;
+        Manager(string name, string empId, string position)
+        {
+            this->name = name;
+            this->empId = empId;
+            this->position = position;
+        }
+        
+        void showEmployeeDetails()
+        {
+            cout << "manager info : " << "name : " << name << "empId : " << empId << "position : " << position <<endl;
+        }
+    
+};
+
+class CompanyDirectory : public employee
+{
+    public :
+        list<employee*> employeeList;
+        void addEmployee(employee* emp)
+        {
+            employeeList.push_back(emp);
+        }
+        
+        void showEmployeeDetails()
+        {
+            for(auto emp : employeeList)
+            {
+                emp->showEmployeeDetails();
+            }
+        }
+};
+
+int main()
+{
+    Developer* dev1 = new Developer("Tarun", "1", "dev1");
+    Developer* dev2 = new Developer("Reyansh", "2", "dev2");
+    
+    CompanyDirectory* devDirectory = new CompanyDirectory();
+    devDirectory->addEmployee(dev1);
+    devDirectory->addEmployee(dev2);
+        
+    Manager* manager1 = new Manager("Neetu", "11", "manager1");
+    Manager* manager2 = new Manager("Maheshwari", "22", "manager2");
+    
+    CompanyDirectory* manDirectory = new CompanyDirectory();
+    manDirectory->addEmployee(manager1);
+    manDirectory->addEmployee(manager2);
+    
+    CompanyDirectory* mainDirectory = new CompanyDirectory();
+    mainDirectory->addEmployee(devDirectory);
+    mainDirectory->addEmployee(manDirectory);
+    
+    mainDirectory->showEmployeeDetails();
+    return 0;
+}
