@@ -1,12 +1,13 @@
 //https://refactoring.guru/design-patterns/prototype/cpp/example#:~:text=Prototype%20%2F%20C%2B%2B-,Prototype%20in%20C%2B%2B,their%20concrete%20classes%20are%20unknown.
+//https://www.tutorialspoint.com/design_pattern/prototype_pattern.htm
 #include <iostream>
 #include <bits/stdc++.h>
 using namespace std;
 
 enum Type {
-    PROTOTYPE_1 = 0;
-    PROTOTYPE_2;
-}
+    PROTOTYPE_1 = 0,
+    PROTOTYPE_2
+};
 
 class ProtoType
 {
@@ -27,7 +28,7 @@ class ConcreteProtoType1 : public ProtoType
         }
         ProtoType* clone() const override
         {
-            return ConcreteProtoType1(*this);
+            return new ConcreteProtoType1(*this);
         }
 };
 
@@ -41,7 +42,7 @@ class ConcreteProtoType2 : public ProtoType
         }
         ProtoType* clone() const override
         {
-            return ConcreteProtoType2(*this);
+            return new ConcreteProtoType2(*this);
         }
 };
 
@@ -50,11 +51,30 @@ class PrototypeFactory
     public : 
         unordered_map<Type,ProtoType*, hash<int>> protoTypeMap;
         
-        
+        PrototypeFactory()
+        {
+            protoTypeMap[Type::PROTOTYPE_1] = new ConcreteProtoType1("PROTOTYPE_1_str", 50.f);
+            protoTypeMap[Type::PROTOTYPE_2] = new ConcreteProtoType2("PROTOTYPE_2_str", 100.f);
+        }
+        ProtoType* createProtoType(Type type)
+        {
+            return protoTypeMap[type]->clone();
+        }
 };
 
+void client(PrototypeFactory* prototypeFactoryObj)
+{
+    cout << "Let us clone Prototype 1 obj " << endl;
+    ProtoType* tempClone1 = prototypeFactoryObj->createProtoType(Type::PROTOTYPE_1);
+    cout << "Print clone 1 members : " << tempClone1->base_member;
+    cout << "Let us clone ProtoType 2 obj " << endl;
+    ProtoType* tempClone2 = prototypeFactoryObj->createProtoType(Type::PROTOTYPE_2);
+    cout << "Print clone 2 members : " << tempClone2->base_member;
+}
 int main()
 {
     PrototypeFactory* prototypeFactoryObj = new PrototypeFactory();
+    client(prototypeFactoryObj);
     
+    return 0;
 }
