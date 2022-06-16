@@ -1,1 +1,60 @@
 //https://refactoring.guru/design-patterns/prototype/cpp/example#:~:text=Prototype%20%2F%20C%2B%2B-,Prototype%20in%20C%2B%2B,their%20concrete%20classes%20are%20unknown.
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+
+enum Type {
+    PROTOTYPE_1 = 0;
+    PROTOTYPE_2;
+}
+
+class ProtoType
+{
+    public :
+        string base_member;
+        float   base_member_field;
+        ProtoType(string memberS) : base_member(memberS){ }
+        virtual ProtoType* clone() const = 0;
+};
+
+class ConcreteProtoType1 : public ProtoType
+{
+    public :
+        float member1;
+        ConcreteProtoType1(string memberS, float memberF) : ProtoType(memberS), member1(memberF)
+        {
+            
+        }
+        ProtoType* clone() const override
+        {
+            return ConcreteProtoType1(*this);
+        }
+};
+
+class ConcreteProtoType2 : public ProtoType
+{
+    public :
+        float member2;
+        ConcreteProtoType2(string memberS, float memberF) : ProtoType(memberS), member2(memberF)
+        {
+            
+        }
+        ProtoType* clone() const override
+        {
+            return ConcreteProtoType2(*this);
+        }
+};
+
+class PrototypeFactory
+{
+    public : 
+        unordered_map<Type,ProtoType*, hash<int>> protoTypeMap;
+        
+        
+};
+
+int main()
+{
+    PrototypeFactory* prototypeFactoryObj = new PrototypeFactory();
+    
+}
