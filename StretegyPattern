@@ -1,0 +1,66 @@
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+
+class Stretegy
+{
+    public :
+        virtual int doOperation(int num1, int num2) = 0;
+};
+
+class OperationAddStretegy : public Stretegy
+{
+    public :
+        int doOperation(int num1, int num2)
+        {
+            return num1 + num2;
+        }
+};
+
+class OperationSubStretegy : public Stretegy
+{
+    public :
+        int doOperation(int num1, int num2)
+        {
+            return num1 - num2;
+        }
+};
+
+class OperationMulStretegy : public Stretegy
+{
+    public :
+        int doOperation(int num1, int num2)
+        {
+            return num1 * num2;
+        }
+};
+
+class Context
+{
+    public :
+        Stretegy* stretegy;
+        
+        Context(Stretegy* stretegy)
+        {
+            this->stretegy = stretegy;
+        }
+    
+        void executeStretegy(int num1, int num2)
+        {
+            cout << this->stretegy->doOperation(num1,num2) << endl;
+        }
+};
+
+int main()
+{
+    Context* newContext = new Context(new OperationAddStretegy());
+    newContext->executeStretegy(10,5);
+    
+    newContext = new Context(new OperationSubStretegy());
+    newContext->executeStretegy(10,5);
+    
+    newContext = new Context(new OperationMulStretegy());
+    newContext->executeStretegy(10,5);
+    
+    return 0;
+}
