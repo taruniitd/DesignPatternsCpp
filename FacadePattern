@@ -1,0 +1,72 @@
+//https://www.tutorialspoint.com/design_pattern/facade_pattern.htm
+//https://www.tutorialspoint.com/design_pattern/facade_pattern.htm
+#include <iostream>
+using namespace std;
+
+class Shape
+{
+    public :
+    virtual void draw() = 0;
+};
+
+class Circle : public Shape
+{
+    public :
+        void draw()
+        {
+            std::cout <<  "draw circle dear " << std::endl;
+        }
+};
+
+class Rectangle : public Shape
+{
+    public :
+        void draw()
+        {
+            cout << " draw Rectangle dear " << endl;
+        }
+};
+
+class Square : public Shape
+{
+    public :    
+        void draw()
+        {
+            cout << " draw Circle dear " << endl;
+        }
+};
+
+class ShapeMaker
+{
+    public :
+    Shape* circle;
+    Shape* rectangle;
+    Shape* square;
+    
+    ShapeMaker()
+    {
+        circle = new Circle();
+        rectangle = new Rectangle();
+        square = new Square();
+    }
+    void drawCircle()
+    {
+        circle->draw();
+    }
+    void drawRectangle()
+    {
+        rectangle->draw();
+    }
+    void drawSquare()
+    {
+        square->draw();
+    }
+};
+
+int main() {
+	ShapeMaker* shapeMaker = new ShapeMaker();
+	shapeMaker->drawCircle();
+	shapeMaker->drawRectangle();
+	shapeMaker->drawSquare();
+	return 0;
+}
