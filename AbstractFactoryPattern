@@ -1,0 +1,106 @@
+#include <iostream>
+using namespace std;
+
+class Shape
+{
+    public :
+    virtual void draw() = 0;
+};
+
+
+class Rectangle : public Shape
+{
+    public :
+        void draw()
+        {
+            cout << " draw Rectangle dear " << endl;
+        }
+};
+
+class Square : public Shape
+{
+    public :    
+        void draw()
+        {
+            cout << " draw Circle dear " << endl;
+        }
+};
+
+class RoundedRectangle : public Shape
+{
+    public :
+        void draw()
+        {
+            std::cout <<  "draw Rounded Rectangle dear " << std::endl;
+        }
+};
+
+class RoundedSquare : public Shape
+{
+    public :
+        void draw()
+        {
+            std::cout <<  "draw Rounded Square dear " << std::endl;
+        }
+};
+class AbstractFactory
+{
+    public :
+    virtual Shape* getshape(string) = 0;    
+};
+
+class ShapeFactory : public AbstractFactory
+{
+    public :
+        Shape* getshape(string type)
+        {
+            if(type == "RECTANGLE")
+            {
+                return new Rectangle();
+            }
+            else
+            {
+                return new Square();
+            }
+        }
+};
+
+class RoundedShapeFactory : public AbstractFactory
+{
+    public :
+        Shape* getshape(string type)
+        {
+            if(type == "RECTANGLE")
+                return new RoundedRectangle();
+            else
+                return new RoundedSquare();
+        }
+};
+
+class FactoryProducer
+{
+    public :
+    AbstractFactory* getFactory(bool rounded)
+    {
+        if(rounded)
+            return new RoundedShapeFactory();
+        else
+            return new ShapeFactory();
+    }
+};
+
+int main() {
+    FactoryProducer* factoryProducerObj = new FactoryProducer();
+	AbstractFactory* factoryNormalObj = factoryProducerObj->getFactory(false);
+	Shape* shape1 = factoryNormalObj->getshape("RECTANGLE");
+	
+	shape1->draw();
+	AbstractFactory* factoryRoundObj = factoryProducerObj->getFactory(true);
+	Shape* shape2 = factoryRoundObj->getshape("RECTANGLE");
+	shape2->draw();
+	
+	
+	Shape* shape3 = factoryRoundObj->getshape("SQUARE");
+	shape3->draw();
+	return 0;
+}
