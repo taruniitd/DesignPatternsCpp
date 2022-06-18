@@ -1,0 +1,56 @@
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+class AlertStateContext;
+class MobileAlertState
+{
+    public :
+        virtual void alert(AlertStateContext* ) = 0;
+};
+
+class Vibrartion : public MobileAlertState
+{
+    public :
+        void alert(AlertStateContext* stateCxt)
+        {
+            std::cout <<  "mobile Vibrartion state now " << std::endl;
+        }
+};
+
+class Silent : public MobileAlertState
+{
+    public :
+        void alert(AlertStateContext* stateCxt)
+        {
+            cout << "mobile Silent state now " << endl;
+        }
+};
+
+class AlertStateContext
+{
+    public :
+        MobileAlertState* cur_state;
+        AlertStateContext()
+        {
+            cur_state = new Vibrartion();
+        }
+        void setState(MobileAlertState* new_state)
+        {
+            cur_state = new_state;
+        }
+        void alert()
+        {
+            cur_state->alert(this);
+        }
+        
+};
+
+int main()
+{
+    AlertStateContext* stateContext = new AlertStateContext();
+    stateContext->alert();
+    
+    stateContext->setState(new Silent());
+    stateContext->alert();
+    return 0;
+}
