@@ -1,0 +1,60 @@
+//https://www.modernescpp.com/index.php/thread-safe-initialization-of-a-singleton
+//https://refactoring.guru/design-patterns/singleton/cpp/example
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+
+std::mutex myMutex;
+
+class Singleton
+{
+    protected:
+        string name;
+        static Singleton* obj;
+        Singleton(const string name) 
+        {
+            this->name = name;
+        }
+    public:
+        Singleton(Singleton& other) = delete;
+        void operator = (const Singleton& ) = delete;
+        static Singleton* getInstance(const string& name);
+        
+        void getName()
+        {
+            std::cout << "thread having name : " << name << std::endl;
+        }
+};
+Singleton* Singleton::obj = nullptr;;
+
+Singleton* Singleton::getInstance(const string& name)
+{
+    std::lock_guard<std::mutex> mylock(myMutex);
+    if(obj == nullptr)
+        obj = new Singleton(name);
+    return obj;
+}
+void firstThdFunc()
+{
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));   
+    Singleton* obj2 = Singleton::getInstance("Vicky");
+    obj2->getName();
+    
+}
+
+void secondThdFunc()
+{
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    Singleton* obj1 = Singleton::getInstance("Tarun");
+    obj1->getName();
+}
+
+int main()
+{
+    std::thread t1(firstThdFunc);
+    std::thread t2(secondThdFunc);
+    
+    t1.join();
+    t2.join();
+    return 0;
+}
